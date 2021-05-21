@@ -15,7 +15,6 @@ const csvWriter = createCsvWriter({
     { id: "xml3", title: "XML3" },
     { id: "xml4", title: "XML4" },
     { id: "xml5", title: "XML5" },
-    { id: "xml6", title: "XML6" },
   ],
 });
 
@@ -104,6 +103,7 @@ function createDataSet(filesArray) {
   return records;
 }
 
+
 async function writeToCSV(rawRecords) {
   const records = [];
 
@@ -111,12 +111,22 @@ async function writeToCSV(rawRecords) {
     const xmlObj = {};
     await Promise.all(
       r.xmls.map(async (xml, index) => {
+        let xmlNumber = 5; //  not match
+        if (xml.includes("PersonalDetailsFlowRuleset")) xmlNumber = 1;
+        if (xml.includes("MyDocumentsFlowRuleset")) xmlNumber = 2;
+        if (xml.includes("FamilyAndEmergencyContactsFlowRuleset"))
+          xmlNumber = 3;
+        if (xml.includes("ContactInformationFlowRuleset")) xmlNumber = 4;
+
         const data = await fs.promises.readFile(xml, "utf8");
-        xmlObj["xml" + (index + 1)] = data;
+        xmlObj["xml" + xmlNumber] = data;
       })
     );
 
-    records.push({ folder: r.folder.replace(".zip", "").split("_")[1], ...xmlObj });
+    records.push({
+      folder: r.folder.replace(".zip", "").split("_")[1],
+      ...xmlObj,
+    });
     await csvWriter.writeRecords(records);
   });
 }
