@@ -103,12 +103,6 @@ function createDataSet(filesArray) {
   return records;
 }
 
-const xmlMAP = {
-  "PersonalDetailsFlowRuleset.xml": 1,
-  "MyDocumentsFlowRuleset.xml": 2,
-  "FamilyAndEmergencyContactsFlowRuleset.xml": 3,
-  "ContactInformationFlowRuleset.xml": 4,
-};
 
 async function writeToCSV(rawRecords) {
   const records = [];
